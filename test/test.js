@@ -1,4 +1,4 @@
-var weibo = require("weiboAPI")
+var weibo = require("weiboapi")
 var EventProxy =require('eventproxy')
 var proxy = new EventProxy()
 //查询用户的朋友，即相互关注
