@@ -1,5 +1,5 @@
 {
-  "name": "weiboAPI",
+  "name": "weiboapi",
   "version": "0.0.1",
   "description": "Sina Weibo API based on webpage analytic",
   "main": "index.js",
@@ -7,6 +7,7 @@
     "test": "test"
   },
   "dependencies": {
+    "eventproxy": "~0.1.4",
     "request": "~2.11.2"
   },
   "devDependencies": {},
@@ -19,8 +20,9 @@
   },
   "keywords": [
     "weibo",
-     "API"",
-     "nodejs"  ],
+    "API",
+    "nodejs"
+  ],
   "author": "birdroid2@weibo",
   "license": "MIT"
 }
