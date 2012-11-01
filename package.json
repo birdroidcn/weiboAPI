@@ -1,0 +1,26 @@
+{
+  "name": "weiboAPI",
+  "version": "0.0.1",
+  "description": "Sina Weibo API based on webpage analytic",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "request": "~2.11.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/birdroidcn/weiboAPI.git"
+  },
+  "keywords": [
+    "weibo",
+     "API"",
+     "nodejs"  ],
+  "author": "birdroid2@weibo",
+  "license": "MIT"
+}
