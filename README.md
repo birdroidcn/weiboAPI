@@ -11,7 +11,7 @@ npm install weiboapi -g
 # Usage
 ```
 //引入包
-var weibo = require("weiboAPI")
+var weibo = require("weiboapi")
 //输入账号和密码 ，成功返回API对象
 weibo.login('email','password',function(err,API){
 	if(!err){
