@@ -6,7 +6,7 @@ weiboAPI(nodejs version)
 # Installation
 安装
 ```
-npm install weiboAPI -g
+npm install weiboapi -g
 ```
 # Usage
 ```
