@@ -33,7 +33,7 @@ getShow(uid,callback)  //回调函数有两个参数，第一个为err，第二�
 getFollow(uid,page,callback)
 getFans(uid,page,callback)
 getTimeline(uid,page,callback)
-getComment(uid,callback)  //注意：每条微博最多返回10条评论
+getComment(uid,page,callback)  
 getSearch(keyword,page,callback)  //注意：返回结果未被解析
 getData(uri,callback)  //uri是请求地址，回到函数有三个参数，第一个为err 第二个为响应结果，第三个为响应主体，均未解析
 ```

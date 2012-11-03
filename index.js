@@ -310,9 +310,8 @@ var API = {
 	/**
 	 * @description get weibo's comments
 	 * It return err and result(obj) when callback called
-	 * Todo return entiry comments list 
-	 * Now it only return 10 comments to max !!!  
 	 * @para {String} mid weibo's id
+	 * @para {number} page 
 	 * @para {Function} callback
 	 */	
 	getComment : function(mid,page,callback){
