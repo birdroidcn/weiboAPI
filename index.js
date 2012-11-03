@@ -126,7 +126,7 @@ var API = {
 	header : {
 	   'User-Agent' : "Mozilla/5.0 (Windows NT 5.1) AppleWebKit/537.13 (KHTML, like Gecko) Chrome/24.0.1290.1 Safari/537.13",
        'X-Requested-With': 'XMLHttpRequest',
-       'Content-Type': 'application/x-www-form-urlencoded'
+       'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'
 	},
 	/**
 	 * @description get user's information 
@@ -266,8 +266,10 @@ var API = {
              },
              method : 'get',
              followRedirect : false,
+             encoding : 'utf8',
              header : this.header
 	     }
+	     var self = this
 	     var pagebar = 0
 	 	 var result = {
  			count : 0,
@@ -282,11 +284,11 @@ var API = {
 				while ( (re = patt.exec(body) )!= null ){
 					var weibo = {
 						mid : re[1],
-						text : re[2].replace(/<.+?>/g,'')
+						text : self._decode(re[2].replace(/<.+?>/g,''))
 					}
 					var pic = re[0].match(/<img.+?node-type=\\"feed_list_media_bgimg\\" src=\\"(.+?)\\"/)
 					if(pic){
-						weibo.pic = pic[1]
+						weibo.pic = pic[1].replace(/\\/g,'')
 					}
 					result.data.push(weibo)
 				}
@@ -313,17 +315,20 @@ var API = {
 	 * @para {String} mid weibo's id
 	 * @para {Function} callback
 	 */	
-	getComment : function(mid,callback){
+	getComment : function(mid,page,callback){
 		 var rest ={
-	 	     uri: 'http://weibo.com/aj/comment/small?',
+	 	     uri: 'http://weibo.com/aj/comment/big',
              qs : {
-             	'mid'  : mid,
-             	'_wv'  : '5'
+             	'id'  : mid,
+             	'_wv'  : '5',
+             	'page' : page
              },
              method : 'get',
              followRedirect : false,
+             encoding : 'utf8',
              header : this.header
 	     }
+	     var self = this
 	     request(rest,function(err,res,body){
 	     	
 	     	if(!err && res.statusCode == 200){
@@ -331,19 +336,19 @@ var API = {
 	     			count : 0,
 	     			data : []
 	     		}
-				var patt = /<dl comment_id=.+?>.+?<dd>.+?<a.+?id=(\d+).+?>(.+?)<\\\/a>(.+?)<div class=\\"info\\">.+?<\\\/dd>.+?<\\\/dl>/g
+				var patt = /<dl class=\\"comment_list S_line1\\"\s+mid=.+?>.+?<dd>.+?<a.+?id=(\d+).+?>(.+?)<\\\/a>(.+?)<div class=\\"info\\">.+?<\\\/dd>.+?<\\\/dl>/g
 				var re = ''
 				while ( (re = patt.exec(body) )!= null ){
 					var comment = {
 						id : re[1],
-						name : re[2],
-						text : re[3].replace(/<.+?>/g,'')
+						name : self._decode(re[2]),
+						text : self._decode(re[3].replace(/(<.+?>)|(\\t)/g,''))
 					}
 					result.data.push(comment)
 				}
 			    re = body.match(/"count":"(\d+)"/)
 			    result.count = re ? re[1] : 0
-				debugger		
+						
 	     		callback(err,result)
 	     	}else{
 	     		callback(err || res.statusCode)
@@ -386,6 +391,14 @@ var API = {
              header : this.header
 	     }
 	     request(rest,callback)		
+	},
+	/**
+	 * Unicode to Chinese ,like \u9a6c to 马
+	 * @para {string} str
+	 * @return {string} 
+	 */
+	_decode : function(str){
+		return unescape(str.replace(/\\/g,'%'))
 	}
 	
 }
