@@ -131,8 +131,8 @@ var API = {
 	/**
 	 * @description get user's information 
 	 * It return err and result(obj) when callback called
-	 * @para {String} id user id
-	 * @para {Function} callback 
+	 * @param {String} id user id
+	 * @param {Function} callback
 	 */
 	getShow : function(id,callback){
 		 var rest ={
@@ -165,9 +165,9 @@ var API = {
 	/**
 	 * @description get user's followers 
 	 * It return err and result(obj) when callback called
-	 * @para {String} id user id
-	 * @para {number} page 
-	 * @para {Function} callback 
+	 * @param {String} id user id
+	 * @param {number} page
+	 * @param {Function} callback
 	 */	
 	getFollow : function(id,page,callback){
 		 var rest ={
@@ -208,9 +208,9 @@ var API = {
 	/**
 	 * @description get user's fans 
 	 * It return err and result(obj) when callback called
-	 * @para {String} id user id
-	 * @para {number} page 
-	 * @para {Function} callback 
+	 * @param {String} id user id
+	 * @param {number} page
+	 * @param {Function} callback
 	 */	
 	getFans : function(id,page,callback){
 		 var rest ={
@@ -252,9 +252,9 @@ var API = {
 	/**
 	 * @description get user's weibo 
 	 * It return err and result(obj) when callback called
-	 * @para {String} id user id
-	 * @para {number} page 
-	 * @para {Function} callback
+	 * @param {String} id user id
+	 * @param {number} page
+	 * @param {Function} callback
 	 */	
 	getTimeline : function(id,page,callback){
 		 var rest ={
@@ -310,9 +310,9 @@ var API = {
 	/**
 	 * @description get weibo's comments
 	 * It return err and result(obj) when callback called
-	 * @para {String} mid weibo's id
-	 * @para {number} page 
-	 * @para {Function} callback
+	 * @param {String} mid weibo's id
+	 * @param {number} page
+	 * @param {Function} callback
 	 */	
 	getComment : function(mid,page,callback){
 		 var rest ={
@@ -355,19 +355,76 @@ var API = {
 	     })
 		
 	},
+  /**
+   *
+   *
+   * @param word {string}
+   * @param type {string} 'all' | 'nickname' | 'school' | 'tag' | 'work'
+   * @param page {number}   1-50
+   * @param callback {function}
+   */
+  searchUser : function(wd,type,page,callback){
+    var rest ={
+      uri: 'http://s.weibo.com/user',
+      qs : {
+        'page' : page
+      },
+      method : 'get',
+      followRedirect : false,
+      encoding : 'utf8',
+      header : this.header
+    }
+
+    if(type == 'all'){
+      rest.uri += wd
+    }else if(  type == 'nickname' || type == 'school'
+                || type == 'tag' || type == 'work'){
+      rest.qs[type] = wd
+    }
+
+    var self = this
+    request(rest,function(err,res,body){
+
+      if(!err && res.statusCode == 200){
+        var result = {
+          count : 0,
+          data : []
+        }
+        var pattStr = '<div class=\\"list_person clearfix\\">.+?'
+          + '<img src=\\"(.+?)\\" usercard'
+          + ''
+        var patt = new RegExp(pattStr,'g')
+        var re = ''
+        while ( (re = patt.exec(body) )!= null ){
+          var comment = {
+            id : re[1],
+            name : self._decode(re[2]),
+            text : self._decode(re[3].replace(/(<.+?>)|(\\t)/g,''))
+          }
+          result.data.push(comment)
+        }
+        re = body.match(/"count":"(\d+)"/)
+        result.count = re ? re[1] : 0
+
+        callback(err,result)
+      }else{
+        callback(err || res.statusCode)
+      }
+    })
+  },
 	/**
 	 * @description get weio search result
 	 * It return err ,response and response'data when callback called
 	 * Todo parse data ,now it only return raw data it scrap
-	 * @para {String} word keyword to search
-	 * @para {number} page result's page
-	 * @para {Function} callback 
+	 * @param {String} word keyword to search
+	 * @param {number} page result's page
+	 * @param {Function} callback
 	 */	
 	getSearch : function(word,page,callback){
 		 var rest ={
 	 	     uri: 'http://s.weibo.com/weibo/' + word,
              qs : {
-             	'page' : typeof page === 'number' ? page : 1,
+             	'page' : typeof page === 'number' ? page : 1
              },
              method : 'get',
              followRedirect : false,
@@ -379,8 +436,8 @@ var API = {
 	 * @description  API only realize several mainly inferface,if
 	 * you want to get more ,use it and parse data 
 	 * It return err ,response and response'data when callback called
-	 * @para {String} uri uri of resource 
-	 * @para {Function} callback
+	 * @param {String} uri uri of resource
+	 * @param {Function} callback
 	 */	
 	getData : function(uri,callback){
 		 var rest ={
@@ -393,7 +450,7 @@ var API = {
 	},
 	/**
 	 * Unicode to Chinese ,like \u9a6c to 马
-	 * @para {string} str
+	 * @param {string} str
 	 * @return {string} 
 	 */
 	_decode : function(str){
