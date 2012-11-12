@@ -1,6 +1,6 @@
 {
   "name": "weiboapi",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Sina Weibo API based on webpage analytic",
   "main": "index.js",
   "directories": {
