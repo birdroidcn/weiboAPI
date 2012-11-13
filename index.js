@@ -1,4 +1,4 @@
-var rsa = require('rsa.js') //weibo's rsa module
+var rsa = require('./lib/rsa.js') //weibo's rsa module
 var request = require('request') //a third request module
 /**
  * @overview sina weibo's login obj
