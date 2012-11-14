@@ -22,15 +22,15 @@ var weibo = {
         var self = this
         request(rest,function(error,response,body){
            if(!error && response.statusCode == 200){
-				var json = body.match(/{.*}/)[0];
-				var para  = JSON.parse(json);
-				
-				var RSAKey = new rsa.RSAKey();
-				RSAKey.setPublic(para.pubkey, '10001');
-				var password = RSAKey.encrypt([para.servertime, para.nonce].join("\t") + "\n" + self.info.sp);
-				
-				self.info.sp = password;      
-				self._loginRest(para);       
+              var json = body.match(/{.*}/)[0];
+              var para  = JSON.parse(json);
+
+              var RSAKey = new rsa.RSAKey();
+              RSAKey.setPublic(para.pubkey, '10001');
+              var password = RSAKey.encrypt([para.servertime, para.nonce].join("\t") + "\n" + self.info.sp);
+
+              self.info.sp = password;
+              self._loginRest(para);
            }
         })
 	},
@@ -65,13 +65,16 @@ var weibo = {
        	}
        	var self = this
        	request(rest,function(error,response,body){
-       		if(response.statusCode == 200 && !error){
+       		if( !error && response.statusCode == 200 ){
        			try{
        		      var url = body.match(/location\.replace\('(.*)'\)/)[1]
                   self._login(url)
                }catch(e){
                	  console.log(e)
+                  self.callback(error || "login fail")
                }
+           }else{
+               self.callback(error || "login fail")
            }
        	})		
 	},
@@ -82,7 +85,7 @@ var weibo = {
 	_login : function(url){
 		var self = this;
 		request(url,function(error,res,body){
-			if (res.headers['set-cookie']) {
+			if (!error && res.headers['set-cookie']) {
 			     API.header.cookies = [
 			         "USRV5WB=usrmdins312_139",
                      " USRV36WB=usrmdins211174", 
@@ -407,7 +410,7 @@ var API = {
     var self = this
     request(rest,function(err,res,body){
 
-      if(!err && res.statusCode == 200){
+      if(!err  && res.statusCode == 200){
         var result = {
           count : 0,
           data : []
