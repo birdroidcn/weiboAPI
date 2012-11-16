@@ -247,7 +247,6 @@ var API = {
 	     		})
 	     		callback(err,result)
 	     	}else{
-	     		debugger
 	     		callback(err || res.statusCode)
 	     	}
 	     })		
