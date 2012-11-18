@@ -414,7 +414,7 @@ var API = {
           count : 0,
           data : []
         }
-        var patt = /<li class=\\"clearfix\\" data-follow=\\"uid=(\d+)&fnick=(.+?)\\".+?<img  alt=.+?src=\\"(.+?)\\">.+?(male|female).+?>(.+?)\\t.+?follow\\">(\d+).+?fans\\">(\d+).+?info\\">(.+?)<.+?/g
+        var patt = /<li class=\\"clearfix\\" data-follow=\\"uid=(\d+)&fnick=(.+?)\\".+?<img  alt=.+?src=\\"(.+?)\\">.+?(male|female).+?>(.+?)\\t.+?follow\\">(\d+).+?fans\\">(\d+).+?info\\">(.+?)<\\\/p>/g
         var re = ''
         while ( (re = patt.exec(body) )!= null ){
           var person = {
@@ -425,7 +425,7 @@ var API = {
             location : re[5],
             follow : re[6],
             fans : re[7],
-            profile : re[8]
+            profile : re[8].match(/action-type=\\"moreData\\"/) ? '' : re[8]
           }
           result.data.push(person)
         }
