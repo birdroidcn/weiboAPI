@@ -67,7 +67,7 @@ var weibo = {
        	request(rest,function(error,response,body){
        		if( !error && response.statusCode == 200 ){
        			try{
-       		      var url = body.match(/location\.replace\('(.*)'\)/)[1]
+       		      var url = body.match(/location\.replace\("(.*)"\)/)[1]
                   self._login(url)
                }catch(e){
                	  console.log(e)
@@ -204,7 +204,7 @@ var API = {
 	     		})
 	     		callback(err,result)
 	     	}else{
-	     		callback(err || res.statusCode)
+	     		callback(err || res.statusCode,{page:page})
 	     	}
 	     })	
 	},
@@ -247,7 +247,7 @@ var API = {
 	     		})
 	     		callback(err,result)
 	     	}else{
-	     		callback(err || res.statusCode)
+	     		callback(err || res.statusCode,{page:page})
 	     	}
 	     })		
 	},
